@@ -125,3 +125,8 @@ MEDIA_URL = '/media/'
 #         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
 #     ]
 # }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 2
+# }

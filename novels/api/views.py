@@ -6,12 +6,14 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import permissions
 from novels.api.permissions import IsAdminUserOrReadOnly,IsReviewAuthorOrReadOnly
 from rest_framework.exceptions import ValidationError
+from novels.api.paginations import PageNumberPagination,SmallPagination
 # from rest_framework.mixins import 
 #Novel
 class NovelListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Novel.objects.all()
+    queryset = Novel.objects.all().order_by('-id')
     serializer_class = NovelSerializer
     permission_classes = [IsAdminUserOrReadOnly]
+    pagination_class = SmallPagination
 
 
 class NovelDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
