@@ -4,7 +4,8 @@ from novels.models import Novel,Review
 from novels.api.serializers import ReviewSerializer,NovelSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework import permissions
-from novels.api.permissions import IsAdminUserOrReadOnly
+from novels.api.permissions import IsAdminUserOrReadOnly,IsReviewAuthorOrReadOnly
+from rest_framework.exceptions import ValidationError
 # from rest_framework.mixins import 
 #Novel
 class NovelListCreateAPIView(generics.ListCreateAPIView):
@@ -22,15 +23,24 @@ class NovelDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class ReviewCreateAPIView(generics.CreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self,serializer):
         novel_pk = self.kwargs.get('novel_pk')
         novel = get_object_or_404(Novel,pk= novel_pk)
-        serializer.save(novel = novel)
+        review_author = self.request.user
+
+        review_qs = Review.objects.filter(novel=novel,review_author=review_author)
+        if review_qs.exists():
+            raise ValidationError('Already Reviewd this novel')
+
+
+        serializer.save(novel = novel,review_author=review_author)
 
 class ReviewDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsReviewAuthorOrReadOnly]
 
 
 
