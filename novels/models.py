@@ -16,7 +16,7 @@ class Novel(models.Model):
 class Review(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
-    review_author   = models.CharField(max_length=10, null=True,blank=True)
+    review_author   = models.ForeignKey(User,on_delete=models.CASCADE)
     review          = models.TextField(blank=True,null=True)
     rating          = models.PositiveIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     novel           = models.ForeignKey(Novel,on_delete= models.CASCADE,related_name='review')

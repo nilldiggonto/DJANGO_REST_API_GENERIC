@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'novels.apps.NovelsConfig',
+    'quotes.apps.QuotesConfig',
 ]
 
 MIDDLEWARE = [
